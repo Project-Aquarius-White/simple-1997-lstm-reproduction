@@ -1,0 +1,49 @@
+# Embedded Reber Grammar
+# Reference: Section 5.1 "Embedded Reber Grammar" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Predict next symbol in embedded Reber grammar sequences
+# Input: One-hot encoded symbols from Reber grammar
+# Output: Valid next symbol predictions
+#
+# "The embedded Reber grammar is a well-known benchmark for RNNs."
+# Requires learning long-range dependencies in grammatical structure.
+
+experiment:
+  name: "reber_grammar"
+  task: "reber"
+  description: "Embedded Reber grammar prediction task"
+
+# Sequence parameters (Section 5.1)
+data:
+  seq_len: null              # Variable length (grammar-determined)
+  avg_seq_len: 20            # Average sequence length
+  num_samples: 256000        # Training sequences
+  num_test_samples: 2560     # Test sequences
+  grammar_type: "embedded"   # Embedded Reber (not simple)
+  symbols: ["B", "T", "S", "X", "P", "V", "E"]
+
+# Training hyperparameters (Section 5.1)
+# "learning rate 0.1 to 0.5"
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.1         # Conservative LR
+  learning_rate_range: [0.1, 0.5]  # Range tested in paper
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 7              # 7 grammar symbols (one-hot)
+  hidden_size: 3             # 3 memory cell blocks
+  output_size: 7             # Next symbol prediction
+
+# Weight initialization (Section 5.1)
+# "weights in range [-0.2, 0.2]"
+initialization:
+  init_range: [-0.2, 0.2]    # Wider range for Reber
+
+# Gate biases (Section 5.1)
+# "output gate bias: -1, -2, -3, -4" (various values tested)
+gate_biases:
+  input_gate: 0.0            # Default
+  output_gate: -2.0          # Moderate output gate bias
+  output_gate_range: [-4.0, -1.0]  # Range tested in paper

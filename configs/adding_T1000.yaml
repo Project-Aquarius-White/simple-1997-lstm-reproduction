@@ -1,0 +1,45 @@
+# Adding Problem - T=1000
+# Reference: Section 5.4 "Adding Problem" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Sum two marked numbers from a sequence of T random numbers
+# Input: Two sequences - random numbers in [0,1] and binary markers
+# Output: Sum of the two marked numbers (regression)
+#
+# Longest time lag tested: "1000 time step sequences represent the
+# largest time lags ever bridged by an RNN."
+
+experiment:
+  name: "adding_T1000"
+  task: "adding"
+  description: "Adding problem with sequence length T=1000"
+
+# Sequence parameters (Section 5.4)
+data:
+  seq_len: 1000              # T=1000 time steps
+  num_samples: 5120000       # Training set size
+  num_test_samples: 5120     # Test set size
+  min_time_lag: 100          # T/10 = 100 steps minimum lag
+  value_range: [0.0, 1.0]    # Random values in [0,1]
+
+# Training hyperparameters (Section 5.4)
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.5         # "learning rate 0.5"
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 2              # (value, marker) pairs
+  hidden_size: 2             # 2 memory cell blocks
+  output_size: 1             # Single sum output
+
+# Weight initialization (Section 5.4)
+# "weights in range [-0.1, 0.1]"
+initialization:
+  init_range: [-0.1, 0.1]
+
+# Gate biases (Section 5.4)
+# "input gate bias: -6 (T=500, T=1000)"
+gate_biases:
+  input_gate: -6.0           # Strongest bias for longest sequences
+  output_gate: 0.0

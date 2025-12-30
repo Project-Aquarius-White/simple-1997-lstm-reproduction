@@ -1,0 +1,34 @@
+# Common default settings for LSTM experiments
+# Based on: Hochreiter & Schmidhuber (1997) "Long Short-Term Memory"
+# Neural Computation, 9(8):1735-1780
+
+# Training defaults
+training:
+  batch_size: 1              # Online learning as in original paper
+  optimizer: "sgd"           # Stochastic gradient descent
+  momentum: 0.0              # No momentum in original experiments
+  gradient_clip: null        # No gradient clipping mentioned
+
+# Network architecture defaults
+network:
+  hidden_size: 1             # Single memory cell block (Section 4)
+  num_layers: 1              # Single hidden layer
+  cell_blocks: 1             # Memory cells per block
+
+# Weight initialization (Section 5)
+initialization:
+  weight_init: "uniform"     # Uniform random initialization
+  init_range: [-0.1, 0.1]    # Default range (varies by experiment)
+
+# Gate bias defaults (Section 4.2)
+# Negative biases keep gates initially closed
+gate_biases:
+  input_gate: 0.0            # Varies by experiment
+  forget_gate: 0.0           # Not in original 1997 paper (added later)
+  output_gate: 0.0           # Varies by experiment
+
+# Logging and checkpointing
+logging:
+  log_interval: 100          # Log every N samples
+  checkpoint_interval: 1000  # Save checkpoint every N samples
+  verbose: true

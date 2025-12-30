@@ -1,0 +1,46 @@
+# Multiplication Problem - T=100
+# Reference: Section 5.5 "Multiplication Problem" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Multiply two marked numbers from a sequence
+# Input: Two sequences - random numbers in [0,1] and binary markers
+# Output: Product of the two marked numbers (regression)
+#
+# "Harder than the adding problem" due to multiplicative nature
+# Requires learning interaction between stored values
+
+experiment:
+  name: "multiplication_T100"
+  task: "multiplication"
+  description: "Multiplication problem with sequence length T=100"
+
+# Sequence parameters (Section 5.5)
+data:
+  seq_len: 100               # T=100 time steps
+  num_samples: 2560000       # Training set size
+  num_test_samples: 2560     # Test set size
+  min_time_lag: 10           # T/10 = 10 steps minimum lag
+  value_range: [0.0, 1.0]    # Random values in [0,1]
+
+# Training hyperparameters (Section 5.5)
+# "learning rate 0.1" (lower than adding due to harder task)
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.1         # Lower LR for stability
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 2              # (value, marker) pairs
+  hidden_size: 2             # 2 memory cell blocks
+  output_size: 1             # Single product output
+
+# Weight initialization (Section 5.5)
+# Same initialization as adding problem
+initialization:
+  init_range: [-0.1, 0.1]
+
+# Gate biases (Section 5.5)
+# Uses same biases as adding T=100
+gate_biases:
+  input_gate: -3.0           # Same as adding T=100
+  output_gate: 0.0

@@ -1,0 +1,45 @@
+# Long Lag Problem - Experiment 2b
+# Reference: Section 5.2 "Experiment 2" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Reproduce a short sequence after a long delay
+# Input: Short pattern followed by distractor sequence
+# Output: Reproduce the original pattern
+#
+# Extended delay version (p=500)
+
+experiment:
+  name: "long_lag_2b"
+  task: "long_lag"
+  description: "Long lag problem - medium lag variant (p=500)"
+
+# Sequence parameters (Section 5.2)
+# Experiment 2b: p=500 (longer delay)
+data:
+  pattern_length: 1          # Single element to remember
+  delay: 500                 # p=500 distractor steps
+  num_samples: 512000        # Training sequences
+  num_test_samples: 5120     # Test sequences
+  distractor_symbols: 4      # Distractor alphabet size
+
+# Training hyperparameters (Section 5.2)
+# Adjusted for longer sequences
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.1         # Lower LR for stability with longer lag
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 6              # Pattern + distractor symbols (one-hot)
+  hidden_size: 1             # 1 memory cell block
+  output_size: 2             # Binary output (0 or 1)
+
+# Weight initialization (Section 5.2)
+# "weights in range [-0.2, 0.2]"
+initialization:
+  init_range: [-0.2, 0.2]
+
+# Gate biases
+gate_biases:
+  input_gate: -4.0           # Stronger bias for longer lag
+  output_gate: 0.0

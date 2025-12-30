@@ -1,0 +1,46 @@
+# Temporal Order Problem - 3 Symbols
+# Reference: Section 5.6 "Temporal Order" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Remember order of 3 symbols appearing in noise
+# Input: Sequence with 3 relevant symbols among distractors
+# Output: One of 8 classes based on order (all permutations of 3 binary symbols)
+#
+# Harder variant requiring more memory capacity
+
+experiment:
+  name: "temporal_order_3sym"
+  task: "temporal_order"
+  description: "Temporal order problem with 3 relevant symbols"
+
+# Sequence parameters (Section 5.6)
+data:
+  seq_len: 100               # Sequence length T
+  seq_len_range: [100, 110]  # Variable length for robustness
+  num_samples: 512000        # More samples for harder task
+  num_test_samples: 5120     # Test set size
+  num_symbols: 3             # 3 relevant symbols (X, Y, Z)
+  num_distractors: 4         # a, b, c, d (noise symbols)
+  num_classes: 8             # 2^3 = 8 possible orderings
+
+# Training hyperparameters (Section 5.6)
+# "learning rate 0.1" for 3-symbol version (harder)
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.1         # Lower LR for harder 3-symbol case
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 7              # 7 possible input symbols (one-hot)
+  hidden_size: 3             # 3 memory cell blocks for 3 symbols
+  output_size: 8             # 8 output classes
+
+# Weight initialization (Section 5.6)
+initialization:
+  init_range: [-0.1, 0.1]
+
+# Gate biases (Section 5.6)
+# "input gate bias: -2 to -4" (stronger for 3 symbols)
+gate_biases:
+  input_gate: -4.0           # Stronger bias for 3-symbol case
+  output_gate: 0.0

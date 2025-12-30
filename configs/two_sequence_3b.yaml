@@ -1,0 +1,45 @@
+# Two-Sequence Problem - Experiment 3b
+# Reference: Section 5.3 "Experiment 3" (Hochreiter & Schmidhuber, 1997)
+#
+# Task: Classify sequences based on two subsequences
+# Input: Two relevant subsequences embedded in noise
+# Output: Classification based on both subsequences
+#
+# Medium-length variant (T=500)
+
+experiment:
+  name: "two_sequence_3b"
+  task: "two_sequence"
+  description: "Two-sequence problem - medium sequences (T=500)"
+
+# Sequence parameters (Section 5.3)
+# Experiment 3b: T=500
+data:
+  seq_len: 500               # Total sequence length
+  relevant_len: 3            # First and last 3 elements are relevant
+  num_samples: 512000        # Training sequences
+  num_test_samples: 5120     # Test sequences
+  num_classes: 4             # Classification output
+
+# Training hyperparameters (Section 5.3)
+# Adjusted for longer sequences
+training:
+  num_epochs: 1              # Single pass (online learning)
+  learning_rate: 0.5         # Moderate LR for longer sequences
+  batch_size: 1              # Online learning
+
+# Network architecture
+network:
+  input_size: 4              # Input symbol encoding
+  hidden_size: 2             # 2 memory cell blocks
+  output_size: 4             # 4 output classes
+
+# Weight initialization (Section 5.3)
+# "weights in range [-0.1, 0.1]"
+initialization:
+  init_range: [-0.1, 0.1]
+
+# Gate biases
+gate_biases:
+  input_gate: -4.0           # Stronger bias for longer sequences
+  output_gate: 0.0

@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aquarius-lstm-1997"
+version = "0.1.0"
+description = "Faithful reproduction of the original 1997 LSTM paper by Hochreiter & Schmidhuber"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Aban Hasan", email = "aban@abanhasan.net"}
+]
+maintainers = [
+    {name = "Project Aquarius", email = "aban@abanhasan.net"}
+]
+keywords = [
+    "lstm",
+    "deep-learning",
+    "recurrent-neural-networks",
+    "paper-reproduction",
+    "project-aquarius",
+    "tinygrad",
+    "pytorch",
+    "machine-learning"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+tinygrad = [
+    "tinygrad>=0.9.0",
+]
+torch = [
+    "torch>=2.0.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+all = [
+    "aquarius-lstm-1997[tinygrad,torch,dev]",
+]
+
+[project.urls]
+Homepage = "https://github.com/Project-Aquarius-White/simple-1997-lstm-reproduction"
+Repository = "https://github.com/Project-Aquarius-White/simple-1997-lstm-reproduction"
+Documentation = "https://github.com/Project-Aquarius-White/simple-1997-lstm-reproduction#readme"
+"Bug Tracker" = "https://github.com/Project-Aquarius-White/simple-1997-lstm-reproduction/issues"
+"Project Aquarius" = "https://aquarius.abanhasan.net"
+
+[project.scripts]
+lstm-adding = "experiments.adding:main"
+lstm-multiplication = "experiments.multiplication:main"
+lstm-temporal = "experiments.temporal_order:main"
+lstm-reber = "experiments.reber:main"
+lstm-run-all = "experiments.run_all:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
