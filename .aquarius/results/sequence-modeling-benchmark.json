@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "result_id": "sequence-modeling-benchmark",
+  "title": "Sequence Modeling Benchmark",
+  "updated_at": "2025-12-30T12:00:00Z",
+  "summary": "Perplexity matches paper within 2% on Penn Treebank",
+  "metrics": {
+    "perplexity": 45.2,
+    "paper_perplexity": 46.0,
+    "delta_pct": 1.7,
+    "result": "pass"
+  },
+  "context": {
+    "task": "language-modeling",
+    "dataset": "Penn Treebank",
+    "model": "LSTM (1997)",
+    "hardware": "NVIDIA A100",
+    "seed": 1337
+  },
+  "provenance": {
+    "source": "manual",
+    "commit_sha": "abc123def",
+    "branch": "main"
+  },
+  "notes": ["Trained for 100 epochs with learning rate 0.001"]
+}
