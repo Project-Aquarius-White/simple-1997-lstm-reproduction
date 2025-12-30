@@ -21,21 +21,28 @@ For each timestep $t$, the forward pass for a single memory cell $c_j$ is define
 
 ### 1. Input Gate ($y^{in}_j$)
 Controls the flow of input signals into the memory cell.
+
 $$net_{in_j}(t) = \sum_u w_{in_j u} y^u(t-1)$$
+
 $$y^{in}_j(t) = f_{in_j}(net_{in_j}(t))$$
 
 ### 2. Output Gate ($y^{out}_j$)
 Controls the flow of output signals from the memory cell to the rest of the network.
+
 $$net_{out_j}(t) = \sum_u w_{out_j u} y^u(t-1)$$
+
 $$y^{out}_j(t) = f_{out_j}(net_{out_j}(t))$$
 
 ### 3. Internal Cell State (CEC update)
 The core "Constant Error Carousel" (CEC) update. Note the absence of a forget gate; the previous state $s_{c_j}(t-1)$ is added directly to the gated new input.
+
 $$net_{c_j}(t) = \sum_u w_{c_j u} y^u(t-1)$$
+
 $$s_{c_j}(t) = s_{c_j}(t-1) + y^{in}_j(t) g(net_{c_j}(t))$$
 
 ### 4. Cell Output ($y^{c_j}$)
 The final hidden state contribution from this memory cell.
+
 $$y^{c_j}(t) = y^{out}_j(t) h(s_{c_j}(t))$$
 
 ## Shared Gates (Memory Cell Blocks)

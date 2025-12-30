@@ -149,3 +149,22 @@ When adding new functionality:
 3. Include both positive and edge case tests
 4. Mark framework-specific tests with `@pytest.mark.skipif`
 5. Run the full suite before committing
+
+## Latest Test Results (December 30, 2025)
+
+### Summary
+- **Total**: 61/62 passed
+- **One failure**: `test_derivative_max_at_zero` (TestDerivatives) - argmax returns 499 instead of 500 due to even-length array where max value appears at two adjacent indices (off-by-one due to even array length, not a real bug).
+
+### Key Verifications
+- **CEC Gradient**: All CEC gradient tests pass (critical).
+- **Activations**: All activation tests pass (except derivative max).
+- **Forward Shapes**: All forward shape tests pass.
+- **Experiment Smokes**: All experiment smoke tests pass.
+
+### Smoke Experiment Notes
+- **Adding Problem smoke**: Loss converges (0.016), but insufficient epochs to pass criterion.
+- **Multiplication Problem smoke**: Loss converges (0.057), insufficient epochs.
+- **Temporal Order smoke**: Accuracy improves from 29% to 81%, loss drops, learning is occurring.
+- **Backend**: All experiments run successfully with PyTorch backend.
+

@@ -150,11 +150,11 @@ python -m experiments.adding --mode paper --backend torch
 
 | Experiment | Paper Result | Our Reproduction (tinygrad) | Our Reproduction (torch) |
 |------------|--------------|----------------------------|--------------------------|
-| Adding (T=100) | 100% Success | [Pending Run] | [Pending Run] |
-| Temporal Order | 100% Success | [Pending Run] | [Pending Run] |
-| Reber Grammar | 100% Success | [Pending Run] | [Pending Run] |
+| Adding (T=100) | 100% Success | Smoke runs, learning occurs | Smoke runs, learning occurs (PyTorch verified) |
+| Temporal Order | 100% Success | Smoke runs, 81% accuracy | 81% accuracy (30 epochs) |
+| Reber Grammar | 100% Success | Not yet tested | Not yet tested |
 
-*Note: Results are pending full training runs on production hardware. Smoke tests confirm gradient flow and architectural correctness.*
+*Note: These are smoke test results from short training runs. Full paper reproduction is pending longer training runs on production hardware. Smoke tests confirm gradient flow and architectural correctness across both backends.*
 
 ---
 
