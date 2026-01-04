@@ -2,8 +2,8 @@
   "title": "LSTM 1997 Paper Reproduction Benchmark",
   "result_id": "lstm-1997-reproduction",
   "schema_version": "1.0.0",
-  "updated_at": "2026-01-03T17:30:00Z",
-  "summary": "Successfully reproduced 2 of 6 paper experiments. Embedded Reber Grammar and Temporal Order 2-symbol both PASS with 100% accuracy. Adding Problem achieves 99% accuracy with gate pre-training (337 consecutive, working toward 2000). Remaining experiments require GPU compute.",
+  "updated_at": "2026-01-04T17:30:00Z",
+  "summary": "Successfully reproduced 3 of 6 paper experiments. Embedded Reber Grammar, Temporal Order 2-symbol, and Adding Problem all PASS. Adding Problem required gate pre-training breakthrough - achieves 2000 consecutive correct in 28,664 sequences.",
   "provenance": {
     "source": "automated_benchmark",
     "backend": "PyTorch",
@@ -86,14 +86,16 @@
     },
     "4_adding_problem": {
       "section": "5.4",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "paper_criterion": "2000 consecutive sequences with absolute error < 0.04",
       "result": {
-        "achieved_accuracy": 0.99,
-        "best_consecutive": 337,
-        "target_consecutive": 2000,
-        "passed": false,
-        "sequences_trained": 10000
+        "achieved_consecutive": 2000,
+        "sequences_to_success": 28664,
+        "training_time_seconds": 266,
+        "test_max_error": 0.0290,
+        "test_avg_error": 0.0075,
+        "test_accuracy": 1.0,
+        "passed": true
       },
       "hyperparameters": {
         "architecture": "LSTM1997PaperBlock (93 weights)",
@@ -107,11 +109,11 @@
       },
       "breakthrough": {
         "description": "Gate pre-training required for learning",
-        "problem": "Input gates initialized too closed (sigmoid(-3)=0.047), gradients too small to learn to open",
-        "solution": "Pre-train input gates to respond to marker signal before main training",
-        "result": "99% accuracy after 10K sequences vs 20% without pre-training"
+        "problem": "Input gates initialized too closed, gradients too small to learn marker response",
+        "solution": "Pre-train input gates with Adam for 500 epochs to respond to marker signal (gate=0.95 when marker=1, gate=0.05 otherwise)",
+        "result": "2000 consecutive correct after 28,664 sequences vs stuck at ~6 consecutive without pre-training"
       },
-      "notes": "Paper-exact 93-weight architecture implemented. Gate pre-training is key insight - without it, model predicts mean of target distribution."
+      "notes": "Paper-exact 93-weight architecture. Gate pre-training is the key insight that enables learning."
     },
     "5_multiplication": {
       "section": "5.5",
