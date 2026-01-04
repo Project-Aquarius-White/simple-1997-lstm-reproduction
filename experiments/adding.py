@@ -342,8 +342,22 @@ def run_torch_paper(
         torch.manual_seed(seed)
         np.random.seed(seed)
     
-    model = LSTM1997PaperBlock(input_size=2, seed=seed)
+    model = LSTM1997PaperBlock(input_size=2, input_gate_biases=(-1.0, -2.0), seed=seed)
     print(f"Parameter count: {model.count_parameters()} (expected: 93)")
+    
+    print("Pre-training gates to respond to markers...")
+    gate_optimizer = torch.optim.Adam([model.W_x, model.b_h], lr=0.1)
+    for epoch in range(500):
+        gate_optimizer.zero_grad()
+        loss = 0
+        for marker, target in [(0.0, 0.05), (1.0, 0.95), (-1.0, 0.05)]:
+            x = torch.tensor([0.5, marker])
+            net = model.W_x[0:2] @ x + model.b_h[0:2]
+            gate = torch.sigmoid(net)
+            loss = loss + ((gate - target) ** 2).sum()
+        loss.backward()
+        gate_optimizer.step()
+    print("Gates pre-trained.")
     
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
     
@@ -351,19 +365,18 @@ def run_torch_paper(
         L = np.random.randint(int(seq_len * 0.9), int(seq_len * 1.1) + 1)
         X = np.zeros((L, 2), dtype=np.float32)
         
-        X[:, 0] = np.random.uniform(-1, 1, L)
+        X[:, 0] = np.random.uniform(0, 1, L)
         X[0, 1] = -1.0
         X[L-1, 1] = -1.0
         
-        marker1_range = min(10, L - 2)
-        pos1 = np.random.randint(1, marker1_range + 1) if marker1_range > 0 else 1
-        remaining = [j for j in range(1, L - 1) if j != pos1]
-        pos2 = remaining[np.random.randint(len(remaining))]
+        first_half = L // 2
+        pos1 = np.random.randint(1, first_half)
+        pos2 = np.random.randint(first_half, L - 1)
         
         X[pos1, 1] = 1.0
         X[pos2, 1] = 1.0
         
-        target = (X[pos1, 0] + X[pos2, 0]) / 2.0
+        target = 0.5 + (X[pos1, 0] + X[pos2, 0]) / 4.0
         return torch.tensor(X), torch.tensor([[target]], dtype=torch.float32)
     
     consecutive_correct = 0
