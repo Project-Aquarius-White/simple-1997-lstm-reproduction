@@ -110,5 +110,16 @@ wandb/
 # OpenCode local config (not part of the repo)
 .opencode/
 
-# PDF (we link to arXiv instead)
+# PDF (we link to arXiv instead, but keep raw_pdf.pdf for animations)
 *.pdf
+!assets/animations/raw_pdf.pdf
+
+# ManimGL animation artifacts
+assets/animations/media/
+assets/animations/__pycache__/
+*.mp4
+*.log
+*.aux
+*.fls
+*.fdb_latexmk
+*.synctex.gz
